@@ -3,7 +3,7 @@
 date_default_timezone_set('UTC');
 
 // Calculate launch date (3 days from now at midnight)
-$launchDate = strtotime('+3 days midnight');
+$launchDate = strtotime('+30 days midnight');
 $launchDateFormatted = date('l, F j, Y', $launchDate);
 
 // Calculate time remaining
