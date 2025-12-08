@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel & Resort - Welcome</title>
+    <title>Avilla Okada</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom styles for the hero background overlay and image */
         .hero-bg {
-            background-image: url('path/to/hero-image.jpg'); /* Replace with your actual image path */
+            background-image: url('asset/image/IMG-20251129-WA0032.jpg'); /* Replace with your actual image path */
             background-size: cover;
             background-position: center;
         }

@@ -2,7 +2,7 @@
     <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
         
         <div>
-            <h4 class="text-lg font-serif mb-4">HOTEL NAME</h4>
+            <h4 class="text-lg font-serif mb-4"><img src="asset/image/av.png" alt="" class="w-[50px]"></h4>
             <p class="text-sm text-gray-400">Luxury redefined. Since 1998, we've set the standard for exquisite hospitality worldwide.</p>
         </div>
         
