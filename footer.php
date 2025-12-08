@@ -1,25 +1,41 @@
-<footer class="bg-blue-600 text-white pt-12 mt-12">
-    <div class="container mx-auto px-4 pb-12">
-        <div class="grid md:grid-cols-3 gap-8">
-            <div>
-                <h4 class="text-2xl font-bold mb-3">Avilla Okada.</h4>
-                <p class="text-sm text-blue-200">
-                    Experience the beauty of a holiday instantly and memorable.
-                </p>
-            </div>
-            <div class="md:col-span-2 flex justify-end items-start">
-                <div>
-                    <p class="text-sm text-blue-200 mb-2">Become hotel Owner</p>
-                    <button class="bg-white text-blue-600 px-5 py-2 rounded-lg font-medium hover:bg-gray-100 transition duration-150">
-                        Register Now
-                    </button>
-                </div>
+<footer class="bg-gray-900 text-white py-12 mt-16 px-4 md:px-16">
+    <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+        
+        <div>
+            <h4 class="text-lg font-serif mb-4">HOTEL NAME</h4>
+            <p class="text-sm text-gray-400">Luxury redefined. Since 1998, we've set the standard for exquisite hospitality worldwide.</p>
+        </div>
+        
+        <div>
+            <h4 class="text-lg font-serif mb-4">Quick Links</h4>
+            <ul class="space-y-2 text-sm">
+                <li><a href="#" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white transition">Our Services</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white transition">Gallery</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white transition">Blog</a></li>
+            </ul>
+        </div>
+        
+        <div>
+            <h4 class="text-lg font-serif mb-4">Contact</h4>
+            <ul class="space-y-2 text-sm">
+                <li class="text-gray-400">123 Luxury Avenue, City, Country</li>
+                <li class="text-gray-400">Phone: +1 (555) 123-4567</li>
+                <li><a href="mailto:info@hotel.com" class="text-gray-400 hover:text-white transition">info@hotel.com</a></li>
+            </ul>
+        </div>
+        
+        <div>
+            <h4 class="text-lg font-serif mb-4">Follow Us</h4>
+            <div class="flex space-x-3 text-xl text-gray-400">
+                <a href="#" class="hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="hover:text-white"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="hover:text-white"><i class="fab fa-twitter"></i></a>
             </div>
         </div>
     </div>
-    <div class="bg-blue-700 py-3 text-center text-sm text-blue-300">
-        Copyright 2025. All rights reserved. Avilla Okada.
+
+    <div class="mt-10 pt-6 border-t border-gray-800 text-center">
+        <p class="text-xs text-gray-500">&copy; <?php echo date('Y'); ?> HOTEL NAME. All Rights Reserved. | Privacy Policy</p>
     </div>
 </footer>
-</body>
-</html>

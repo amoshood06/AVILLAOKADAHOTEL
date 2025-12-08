@@ -1,15 +1,28 @@
-<header class="container mx-auto px-4 py-4 flex justify-between items-center">
-    <div class="text-xl font-semibold text-gray-900">
-        LankoStay.
-    </div>
-    <nav class="hidden md:flex space-x-8 text-gray-600 font-medium">
-        <a href="#" class="hover:text-blue-600">Home</a>
-        <a href="#" class="hover:text-blue-600">Hotels</a>
-        <a href="#" class="hover:text-blue-600">Rooms</a>
-        <a href="#" class="hover:text-blue-600">About</a>
-        <a href="#" class="hover:text-blue-600">Contact</a>
+<header class="h-[80vh] min-h-[500px] relative hero-bg">
+    <div class="hero-overlay absolute inset-0"></div>
+    
+    <nav class="relative z-10 flex justify-between items-center py-6 px-8 md:px-16">
+        <a href="#" class="text-xl font-serif text-white tracking-widest">HOTEL NAME</a>
+        <div class="hidden md:flex space-x-8 text-sm text-white uppercase tracking-wider">
+            <a href="#" class="hover:text-gray-300">Home</a>
+            <a href="#" class="hover:text-gray-300">Rooms</a>
+            <a href="#" class="hover:text-gray-300">Dining</a>
+            <a href="#" class="hover:text-gray-300">Facilities</a>
+            <a href="#" class="hover:text-gray-300">Contact</a>
+        </div>
+        <button class="text-white md:hidden">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+        </button>
     </nav>
-    <button class="bg-blue-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700 transition duration-150">
-        Login
-    </button>
+
+    <div class="relative z-10 h-full flex flex-col items-center justify-center text-center p-4 pt-0">
+        <p class="text-sm uppercase tracking-[0.3em] text-white/80 mb-4">FOLLOW US</p>
+        <h1 class="text-4xl md:text-6xl font-serif text-white mb-6">Welcome to Our Next-Level<br>Hotel & Resort</h1>
+        <p class="text-lg text-white/90 max-w-xl mb-10 hidden md:block">
+            Experience unparalleled luxury and breathtaking views at the intersection of modern elegance and natural beauty.
+        </p>
+        <button class="bg-yellow-600 hover:bg-yellow-700 text-black uppercase font-semibold py-3 px-8 transition duration-300 shadow-xl">
+            Book Your Stay
+        </button>
+    </div>
 </header>
