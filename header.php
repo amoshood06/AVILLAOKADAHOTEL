@@ -25,7 +25,7 @@
         <p class="text-lg text-white/90 max-w-xl mb-10 hidden md:block">
             Experience unparalleled luxury and breathtaking views at the intersection of modern elegance and natural beauty.
         </p>
-        <button class="bg-yellow-600 hover:bg-yellow-700 text-black uppercase font-semibold py-3 px-8 transition duration-300 shadow-xl mb-[100px] rounded-[40px]">
+        <button class="bg-yellow-600 hover:bg-yellow-700 text-black uppercase font-semibold py-3 px-8 transition duration-300 shadow-xl mb-[150px] rounded-[40px]">
             Book Your Stay
         </button>
     </div>

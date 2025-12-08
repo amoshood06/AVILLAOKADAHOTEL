@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LankaStay - Login Account</title>
+    <title>Avilla Okada - Login Account</title>
+    <link rel="shortcut icon" href="asset/image/av1.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .background-image {
