@@ -87,6 +87,7 @@ if (isset($_SESSION['error_message'])) {
             background-color: rgba(255, 255, 255, 0.4); /* White with transparency */
  }
     </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="bg-white min-h-screen flex items-center justify-center">
 
@@ -145,8 +146,8 @@ if (isset($_SESSION['error_message'])) {
                     <input type="password" id="password" name="password" placeholder="6+ characters" 
                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 pr-10"
                            required>
-                    <span class="absolute inset-y-0 right-0 top-6 pr-3 flex items-center text-gray-400">
-                        &#x1F441;
+                    <span class="absolute inset-y-0 right-0 top-6 pr-3 flex items-center text-gray-400 cursor-pointer" id="toggle-password">
+                        <i class="fas fa-eye-slash"></i>
                     </span>
                 </div>
                 
@@ -168,6 +169,18 @@ if (isset($_SESSION['error_message'])) {
         </div>
     </div>
 <script>
+    const togglePassword = document.querySelector('#toggle-password');
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function (e) {
+        // toggle the type attribute
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        // toggle the eye slash icon
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+
     function showToast(message, type = 'info') {
         let toastContainer = document.getElementById('toast-container');
         if (!toastContainer) {

@@ -7,21 +7,39 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
     exit;
 }
 
+$user = $_SESSION['user'];
+
 if (!isset($_GET['id'])) {
     header('Location: manage-bookings.php');
     exit;
 }
 
-$user = $_SESSION['user'];
 $bookingId = $_GET['id'];
 
-$booking = select("SELECT b.*, u.full_name, u.email, r.room_name, r.price as room_price FROM bookings b JOIN users u ON b.user_id = u.id JOIN rooms r ON b.room_id = r.id WHERE b.id = ?", [$bookingId], true);
+// Fetch booking details
+$booking = select(
+    "SELECT b.*, u.full_name, u.email, u.phone, r.room_name, r.price as room_price, r.image as room_image
+    FROM bookings b
+    JOIN users u ON b.user_id = u.id
+    JOIN rooms r ON b.room_id = r.id
+    WHERE b.id = ?",
+    [$bookingId],
+    true
+);
 
 if (!$booking) {
-    die('Booking not found.');
+    header('Location: manage-bookings.php');
+    exit;
 }
 
-$bookingFoods = select("SELECT fm.food_name, fm.price, bf.quantity FROM booking_foods bf JOIN food_menu fm ON bf.food_id = fm.id WHERE bf.booking_id = ?", [$bookingId]);
+// Fetch food orders for this booking
+$foodOrders = select(
+    "SELECT bf.quantity, fm.food_name, fm.price, (bf.quantity * fm.price) as total_item_price
+    FROM booking_foods bf
+    JOIN food_menu fm ON bf.food_id = fm.id
+    WHERE bf.booking_id = ?",
+    [$bookingId]
+);
 
 ?>
 <!DOCTYPE html>
@@ -69,7 +87,7 @@ $bookingFoods = select("SELECT fm.food_name, fm.price, bf.quantity FROM booking_
     <!-- Content -->
     <div class="flex-1 flex flex-col overflow-hidden">
         <header class="flex justify-between items-center p-6 bg-white border-b-2 border-gray-200">
-            <h2 class="text-2xl text-gray-700 font-semibold">Booking Details</h2>
+            <h2 class="text-2xl text-gray-700 font-semibold">Booking Details (ID: <?php echo htmlspecialchars($booking['id']); ?>)</h2>
             <div class="flex items-center">
                 <span class="text-gray-600 mr-2">Welcome, <?php echo htmlspecialchars($user['full_name']); ?></span>
                 <i class="fas fa-user-circle fa-2x text-gray-500"></i>
@@ -77,75 +95,73 @@ $bookingFoods = select("SELECT fm.food_name, fm.price, bf.quantity FROM booking_
         </header>
 
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-            <div class="bg-white p-8 rounded-lg shadow-md max-w-4xl mx-auto">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl text-gray-800 font-bold">Booking #<?php echo $booking['id']; ?></h3>
-                    <span class="px-3 py-1 font-semibold leading-tight <?php echo $booking['payment_status'] === 'paid' ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'; ?> rounded-full">
-                        <?php echo ucfirst($booking['payment_status']); ?>
-                    </span>
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Booking Information -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl text-gray-700 font-semibold mb-4">Booking Information</h3>
+                    <p class="mb-2"><strong>Room:</strong> <?php echo htmlspecialchars($booking['room_name']); ?></p>
+                    <p class="mb-2"><strong>Check-in:</strong> <?php echo date("M j, Y", strtotime($booking['check_in'])); ?></p>
+                    <p class="mb-2"><strong>Check-out:</strong> <?php echo date("M j, Y", strtotime($booking['check_out'])); ?></p>
+                    <p class="mb-2"><strong>Total Amount:</strong> ₦<?php echo number_format($booking['total_amount'], 2); ?></p>
+                    <p class="mb-2">
+                        <strong>Payment Status:</strong> 
+                        <span class="px-2 py-1 font-semibold leading-tight <?php echo $booking['payment_status'] === 'paid' ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'; ?> rounded-sm">
+                            <?php echo ucfirst($booking['payment_status']); ?>
+                        </span>
+                    </p>
+                    <p class="mb-2"><strong>Booked On:</strong> <?php echo date("M j, Y H:i", strtotime($booking['created_at'])); ?></p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <h4 class="text-lg font-semibold text-gray-700 mb-2">Customer Details</h4>
-                        <p><strong>Name:</strong> <?php echo htmlspecialchars($booking['full_name']); ?></p>
-                        <p><strong>Email:</strong> <?php echo htmlspecialchars($booking['email']); ?></p>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-semibold text-gray-700 mb-2">Booking Information</h4>
-                        <p><strong>Room:</strong> <?php echo htmlspecialchars($booking['room_name']); ?></p>
-                        <p><strong>Check-in:</strong> <?php echo date("F j, Y", strtotime($booking['check_in'])); ?></p>
-                        <p><strong>Check-out:</strong> <?php echo date("F j, Y", strtotime($booking['check_out'])); ?></p>
-                    </div>
+                <!-- User Information -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl text-gray-700 font-semibold mb-4">Guest Information</h3>
+                    <p class="mb-2"><strong>Name:</strong> <?php echo htmlspecialchars($booking['full_name']); ?></p>
+                    <p class="mb-2"><strong>Email:</strong> <?php echo htmlspecialchars($booking['email']); ?></p>
+                    <p class="mb-2"><strong>Phone:</strong> <?php echo htmlspecialchars($booking['phone']); ?></p>
                 </div>
+            </div>
 
-                <div class="mt-8">
-                    <h4 class="text-lg font-semibold text-gray-700 mb-2">Cost Breakdown</h4>
-                    <div class="border rounded-lg overflow-hidden">
+            <!-- Food Orders for this Booking -->
+            <div class="mt-8 bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl text-gray-700 font-semibold mb-4">Food Orders for this Room (Room: <?php echo htmlspecialchars($booking['room_name']); ?>)</h3>
+                <?php if (!empty($foodOrders)): ?>
+                    <div class="overflow-x-auto">
                         <table class="min-w-full bg-white">
-                            <thead class="bg-gray-200">
+                            <thead class="bg-gray-800 text-white">
                                 <tr>
-                                    <th class="text-left py-2 px-4">Item</th>
-                                    <th class="text-right py-2 px-4">Cost</th>
+                                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Food Item</th>
+                                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Quantity</th>
+                                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Price per item</th>
+                                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Total</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="text-gray-700">
+                                <?php $grandTotalFood = 0; ?>
+                                <?php foreach ($foodOrders as $item): ?>
+                                    <tr>
+                                        <td class="text-left py-3 px-4"><?php echo htmlspecialchars($item['food_name']); ?></td>
+                                        <td class="text-left py-3 px-4"><?php echo htmlspecialchars($item['quantity']); ?></td>
+                                        <td class="text-left py-3 px-4">₦<?php echo number_format($item['price'], 2); ?></td>
+                                        <td class="text-left py-3 px-4">₦<?php echo number_format($item['total_item_price'], 2); ?></td>
+                                    </tr>
+                                    <?php $grandTotalFood += $item['total_item_price']; ?>
+                                <?php endforeach; ?>
                                 <tr>
-                                    <td class="py-2 px-4">Room Charge (<?php
-                                        $checkin = new DateTime($booking['check_in']);
-                                        $checkout = new DateTime($booking['check_out']);
-                                        $nights = $checkout->diff($checkin)->days;
-                                        echo $nights . ' night(s)';
-                                    ?>)</td>
-                                    <td class="text-right py-2 px-4">$<?php echo number_format($booking['room_price'] * $nights, 2); ?></td>
+                                    <td colspan="3" class="text-right py-3 px-4 font-semibold">Grand Total Food:</td>
+                                    <td class="text-left py-3 px-4 font-semibold">₦<?php echo number_format($grandTotalFood, 2); ?></td>
                                 </tr>
-                                <?php if (!empty($bookingFoods)): ?>
-                                    <tr><td colspan="2" class="py-2 px-4 font-semibold text-gray-600">Food Orders</td></tr>
-                                    <?php
-                                    $foodTotal = 0;
-                                    foreach ($bookingFoods as $food) {
-                                        $itemTotal = $food['price'] * $food['quantity'];
-                                        $foodTotal += $itemTotal;
-                                        echo '<tr>';
-                                        echo '<td class="py-2 px-4">' . htmlspecialchars($food['food_name']) . ' (x' . $food['quantity'] . ')</td>';
-                                        echo '<td class="text-right py-2 px-4">$' . number_format($itemTotal, 2) . '</td>';
-                                        echo '</tr>';
-                                    }
-                                    ?>
-                                <?php endif; ?>
                             </tbody>
-                            <tfoot class="font-bold">
-                                <tr>
-                                    <td class="py-3 px-4 text-right">Total Amount</td>
-                                    <td class="py-3 px-4 text-right text-xl text-blue-600">$<?php echo number_format($booking['total_amount'], 2); ?></td>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
-                </div>
-                 <div class="mt-8 text-right">
-                    <a href="manage-bookings.php" class="text-blue-500 hover:underline">Back to All Bookings</a>
-                </div>
+                <?php else: ?>
+                    <p class="text-center text-gray-500">No food orders for this booking yet.</p>
+                <?php endif; ?>
+            </div>
+
+            <div class="mt-8 text-center">
+                <a href="manage-bookings.php" class="inline-block bg-gray-600 text-white py-2 px-5 rounded-lg hover:bg-gray-700 transition">
+                    &larr; Back to Manage Bookings
+                </a>
             </div>
         </main>
     </div>

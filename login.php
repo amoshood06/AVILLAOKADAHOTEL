@@ -26,7 +26,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($user && password_verify($password, $user['password'])) {
         // Password is correct, start session
-        $_SESSION['user'] = $user;
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_role'] = $user['role'];
+        $_SESSION['user_name'] = $user['full_name'];
 
         // Redirect based on role
         if ($user['role'] === 'admin') {
@@ -95,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="password" id="password" name="password" placeholder="6+ characters" 
                            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 pr-10"
                            required>
-                    <span class="absolute inset-y-0 right-0 top-6 pr-3 flex items-center text-gray-400 cursor-pointer">
+                    <span class="absolute inset-y-0 right-0 top-6 pr-3 flex items-center text-gray-400 cursor-pointer" id="toggle-password">
                         <i class="fas fa-eye-slash"></i> </span>
                 </div>
                 
@@ -118,6 +120,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
 <script>
+    const togglePassword = document.querySelector('#toggle-password');
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function (e) {
+        // toggle the type attribute
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        // toggle the eye slash icon
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
     function showToast(message, type = 'info') {
         let toastContainer = document.getElementById('toast-container');
         if (!toastContainer) {

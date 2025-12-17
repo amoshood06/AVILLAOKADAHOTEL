@@ -53,42 +53,10 @@ switch ($reason) {
 }
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Failed - <?php echo htmlspecialchars($site_name); ?></title>
-    <link rel="shortcut icon" href="../asset/image/<?php echo htmlspecialchars($favicon); ?>" type="image/x-icon">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body class="bg-gray-100">
-
-<div class="flex h-screen bg-gray-100">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md">
-        <div class="h-20 flex items-center justify-center">
-            <h1 class="text-2xl font-bold text-blue-600"><?php echo htmlspecialchars($site_name); ?></h1>
-        </div>
-        <nav class="mt-5">
-            <a href="dashboard.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-th-large mr-3"></i> Dashboard
-            </a>
-            <a href="my-bookings.php" class="flex items-center mt-4 py-2 px-6 bg-gray-200 text-gray-700">
-                <i class="fas fa-calendar-alt mr-3"></i> My Bookings
-            </a>
-            <a href="profile.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-user mr-3"></i> Profile
-            </a>
-             <a href="reward-points.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-gift mr-3"></i> Reward Points
-            </a>
-            <a href="../logout.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-sign-out-alt mr-3"></i> Logout
-            </a>
-        </nav>
-    </aside>
+<?php
+$pageTitle = "Payment Failed"; //Set the page title
+require_once 'partials/header_user.php'; //Include the header
+?>
 
     <!-- Content -->
     <div class="flex-1 flex flex-col overflow-hidden">
@@ -115,8 +83,6 @@ switch ($reason) {
                 </div>
             </div>
         </main>
-    </div>
-</div>
-
-</body>
-</html>
+<?php
+require_once 'partials/footer_user.php'; // Include the footer
+?>

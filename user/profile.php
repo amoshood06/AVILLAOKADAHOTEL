@@ -2,12 +2,14 @@
 session_start();
 require_once '../config/functions.php';
 
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user_id'])) {
     header('Location: ../login.php');
     exit;
 }
 
-$user = $_SESSION['user'];
+$user_id = $_SESSION['user_id'];
+$user = select("SELECT * FROM users WHERE id = ?", [$user_id], true);
+
 $settings = getSiteSettings();
 // Initialize with default values
 $site_name = "My Hotel";
@@ -43,19 +45,52 @@ $passwordMessage = '';
 if (isset($_POST['update_profile'])) {
     $fullName = trim($_POST['full_name']);
     $phone = trim($_POST['phone']);
+    $profilePictureName = $user['profile_picture']; // Keep existing picture by default
 
     if (empty($fullName)) {
         $updateMessage = "Full name cannot be empty.";
     } else {
-        $sql = "UPDATE users SET full_name = ?, phone = ? WHERE id = ?";
-        if (execute($sql, [$fullName, $phone, $user['id']])) {
-            // Refresh user session data
-            $_SESSION['user']['full_name'] = $fullName;
-            $_SESSION['user']['phone'] = $phone;
-            $user = $_SESSION['user']; //
-            $updateMessage = "Profile updated successfully!";
-        } else {
-            $updateMessage = "Failed to update profile.";
+        // Handle profile picture upload
+        if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
+            $fileTmpPath = $_FILES['profile_picture']['tmp_name'];
+            $fileName = $_FILES['profile_picture']['name'];
+            $fileSize = $_FILES['profile_picture']['size'];
+            $fileType = $_FILES['profile_picture']['type'];
+            $fileNameCmps = explode(".", $fileName);
+            $fileExtension = strtolower(end($fileNameCmps));
+
+            $allowedFileExtensions = ['jpg', 'gif', 'png', 'jpeg'];
+            if (!in_array($fileExtension, $allowedFileExtensions)) {
+                $updateMessage = "Upload failed. Only JPG, JPEG, PNG, GIF files are allowed.";
+            } elseif ($fileSize > 5000000) { // 5MB max size
+                $updateMessage = "Upload failed. File size must be less than 5MB.";
+            } else {
+                $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+                $uploadFileDir = '../asset/image/users/';
+                $dest_path = $uploadFileDir . $newFileName;
+
+                if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                    // Delete old profile picture if it exists and is not the default
+                    if (!empty($user['profile_picture']) && file_exists($uploadFileDir . $user['profile_picture']) && $user['profile_picture'] !== 'av1.png') {
+                        unlink($uploadFileDir . $user['profile_picture']);
+                    }
+                    $profilePictureName = $newFileName;
+                } else {
+                    $updateMessage = "There was an error moving the uploaded file.";
+                }
+            }
+        }
+
+        if (empty($updateMessage)) { // Proceed only if no upload errors
+            $sql = "UPDATE users SET full_name = ?, phone = ?, profile_picture = ? WHERE id = ?";
+            if (execute($sql, [$fullName, $phone, $profilePictureName, $user_id])) {
+                // Refresh user session data
+                $_SESSION['user_name'] = $fullName;
+                $user = select("SELECT * FROM users WHERE id = ?", [$user_id], true); // Re-fetch user data to get new profile picture
+                $updateMessage = "Profile updated successfully!";
+            } else {
+                $updateMessage = "Failed to update profile.";
+            }
         }
     }
 }
@@ -77,7 +112,7 @@ if (isset($_POST['change_password'])) {
     } else {
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
         $sql = "UPDATE users SET password = ? WHERE id = ?";
-        if (execute($sql, [$hashedPassword, $user['id']])) {
+        if (execute($sql, [$hashedPassword, $user_id])) {
             $passwordMessage = "Password changed successfully!";
         } else {
             $passwordMessage = "Failed to change password.";
@@ -86,42 +121,10 @@ if (isset($_POST['change_password'])) {
 }
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - <?php echo htmlspecialchars($site_name); ?></title>
-    <link rel="shortcut icon" href="../asset/image/<?php echo htmlspecialchars($favicon); ?>" type="image/x-icon">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body class="bg-gray-100">
-
-<div class="flex h-screen bg-gray-100">
-     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md">
-        <div class="h-20 flex items-center justify-center">
-            <h1 class="text-2xl font-bold text-blue-600"><?php echo htmlspecialchars($site_name); ?></h1>
-        </div>
-        <nav class="mt-5">
-            <a href="dashboard.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-th-large mr-3"></i> Dashboard
-            </a>
-            <a href="my-bookings.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-calendar-alt mr-3"></i> My Bookings
-            </a>
-            <a href="profile.php" class="flex items-center mt-4 py-2 px-6 bg-gray-200 text-gray-700">
-                <i class="fas fa-user mr-3"></i> Profile
-            </a>
-             <a href="reward-points.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-gift mr-3"></i> Reward Points
-            </a>
-            <a href="../logout.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-sign-out-alt mr-3"></i> Logout
-            </a>
-        </nav>
-    </aside>
+<?php
+$pageTitle = "My Profile"; //Set the page title
+require_once 'partials/header_user.php'; //Include the header
+?>
 
     <!-- Content -->
     <div class="flex-1 flex flex-col overflow-hidden">
@@ -139,7 +142,17 @@ if (isset($_POST['change_password'])) {
                             <?php echo $updateMessage; ?>
                         </div>
                     <?php endif; ?>
-                    <form action="profile.php" method="POST">
+                    <form action="profile.php" method="POST" enctype="multipart/form-data">
+                        <div class="mb-4 text-center">
+                            <?php
+                            $profilePicture = !empty($user['profile_picture']) ? '../asset/image/users/' . htmlspecialchars($user['profile_picture']) : '../asset/image/av1.png'; // Default image if none
+                            ?>
+                            <img src="<?php echo $profilePicture; ?>" alt="Profile Picture" class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-blue-300 mb-4">
+                            <label for="profile_picture" class="inline-block bg-blue-500 text-white py-2 px-4 rounded-lg cursor-pointer hover:bg-blue-600 transition">
+                                Upload New Photo
+                            </label>
+                            <input type="file" id="profile_picture" name="profile_picture" class="hidden" accept="image/*">
+                        </div>
                         <div class="mb-4">
                             <label for="email" class="block text-gray-700 font-medium mb-2">Email Address</label>
                             <input type="email" id="email" value="<?php echo htmlspecialchars($user['email']); ?>" class="w-full px-4 py-2 bg-gray-200 border rounded-lg" disabled>
@@ -182,8 +195,6 @@ if (isset($_POST['change_password'])) {
                 </div>
             </div>
         </main>
-    </div>
-</div>
-
-</body>
-</html>
+<?php
+require_once 'partials/footer_user.php'; // Include the footer
+?>

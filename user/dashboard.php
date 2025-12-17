@@ -2,12 +2,16 @@
 session_start();
 require_once '../config/functions.php';
 
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user_id'])) {
     header('Location: ../login.php');
     exit;
 }
 
-$user = $_SESSION['user'];
+$user_id = $_SESSION['user_id'];
+$user_name = $_SESSION['user_name'];
+$user = select("SELECT * FROM users WHERE id = ?", [$user_id], true);
+$user_name = $user['full_name']; // Use full_name from the fetched user data
+
 $settings = getSiteSettings();
 // Initialize with default values
 $site_name = "My Hotel";
@@ -38,71 +42,51 @@ if (is_array($settings)) {
 }
 
 // Fetch user statistics
-$totalBookings = select("SELECT COUNT(*) as total FROM bookings WHERE user_id = ?", [$user['id']], true)['total'];
+$totalBookings = select("SELECT COUNT(*) as total FROM bookings WHERE user_id = ?", [$user_id], true)['total'];
+$totalFoodOrders = select("SELECT COUNT(DISTINCT bf.booking_id) as total FROM booking_foods bf JOIN bookings b ON bf.booking_id = b.id WHERE b.user_id = ?", [$user_id], true)['total'];
 $rewardPoints = $user['reward_points'];
 $recentBooking = select(
     "SELECT b.*, r.room_name FROM bookings b JOIN rooms r ON b.room_id = r.id WHERE b.user_id = ? ORDER BY b.created_at DESC LIMIT 1",
-    [$user['id']],
+    [$user_id],
     true
 );
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Dashboard - <?php echo htmlspecialchars($site_name); ?></title>
-    <link rel="shortcut icon" href="../asset/image/<?php echo htmlspecialchars($favicon); ?>" type="image/x-icon">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body class="bg-gray-100">
-
-<div class="flex h-screen bg-gray-100">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md">
-        <div class="h-20 flex items-center justify-center">
-            <h1 class="text-2xl font-bold text-blue-600"><?php echo htmlspecialchars($site_name); ?></h1>
-        </div>
-        <nav class="mt-5">
-            <a href="dashboard.php" class="flex items-center mt-4 py-2 px-6 bg-gray-200 text-gray-700">
-                <i class="fas fa-th-large mr-3"></i> Dashboard
-            </a>
-            <a href="my-bookings.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-calendar-alt mr-3"></i> My Bookings
-            </a>
-            <a href="profile.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-user mr-3"></i> Profile
-            </a>
-             <a href="reward-points.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-gift mr-3"></i> Reward Points
-            </a>
-            <a href="../logout.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-sign-out-alt mr-3"></i> Logout
-            </a>
-        </nav>
-    </aside>
+<?php
+$pageTitle = "My Dashboard"; //Set the page title
+require_once 'partials/header_user.php'; //Include the header
+?>
 
     <!-- Content -->
     <div class="flex-1 flex flex-col overflow-hidden">
         <header class="flex justify-between items-center p-6 bg-white border-b-2 border-gray-200">
             <h2 class="text-2xl text-gray-700 font-semibold">Dashboard</h2>
             <div class="flex items-center">
-                <span class="text-gray-600 mr-2">Welcome, <?php echo htmlspecialchars($user['full_name']); ?></span>
+                <span class="text-gray-600 mr-2">Welcome, <?php echo htmlspecialchars($user_name); ?></span>
                 <i class="fas fa-user-circle fa-2x text-gray-500"></i>
             </div>
         </header>
 
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
             <!-- Statistics Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <div class="flex items-center">
                         <i class="fas fa-calendar-check fa-3x text-green-500"></i>
                         <div class="ml-4">
                             <p class="text-lg text-gray-600">Total Bookings</p>
                             <p class="text-2xl font-bold text-gray-800"><?php echo $totalBookings; ?></p>
+                            <a href="my-bookings.php" class="text-blue-500 text-sm hover:underline">View All Bookings</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center">
+                        <i class="fas fa-hamburger fa-3x text-red-500"></i>
+                        <div class="ml-4">
+                            <p class="text-lg text-gray-600">Total Food Orders</p>
+                            <p class="text-2xl font-bold text-gray-800"><?php echo $totalFoodOrders; ?></p>
+                            <a href="my-foods.php" class="text-blue-500 text-sm hover:underline">View All Orders</a>
                         </div>
                     </div>
                 </div>
@@ -112,6 +96,17 @@ $recentBooking = select(
                         <div class="ml-4">
                             <p class="text-lg text-gray-600">Reward Points</p>
                             <p class="text-2xl font-bold text-gray-800"><?php echo $rewardPoints; ?></p>
+                            <a href="reward-points.php" class="text-blue-500 text-sm hover:underline">Manage Points</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center">
+                        <i class="fas fa-user fa-3x text-blue-500"></i>
+                        <div class="ml-4">
+                            <p class="text-lg text-gray-600">My Profile</p>
+                            <p class="text-2xl font-bold text-gray-800">Edit Details</p>
+                            <a href="profile.php" class="text-blue-500 text-sm hover:underline">Update Profile</a>
                         </div>
                     </div>
                 </div>
@@ -145,8 +140,6 @@ $recentBooking = select(
                 <?php endif; ?>
             </div>
         </main>
-    </div>
-</div>
-
-</body>
-</html>
+<?php
+require_once 'partials/footer_user.php'; // Include the footer
+?>

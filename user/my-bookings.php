@@ -2,12 +2,12 @@
 session_start();
 require_once '../config/functions.php';
 
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user_id'])) {
     header('Location: ../login.php');
     exit;
 }
 
-$user = $_SESSION['user'];
+$user_id = $_SESSION['user_id'];
 $settings = getSiteSettings();
 // Initialize with default values
 $site_name = "My Hotel";
@@ -39,46 +39,14 @@ if (is_array($settings)) {
 
 $bookings = select(
     "SELECT b.*, r.room_name FROM bookings b JOIN rooms r ON b.room_id = r.id WHERE b.user_id = ? ORDER BY b.created_at DESC",
-    [$user['id']]
+    [$user_id]
 );
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Bookings - <?php echo htmlspecialchars($site_name); ?></title>
-    <link rel="shortcut icon" href="../asset/image/<?php echo htmlspecialchars($favicon); ?>" type="image/x-icon">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body class="bg-gray-100">
-
-<div class="flex h-screen bg-gray-100">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md">
-        <div class="h-20 flex items-center justify-center">
-            <h1 class="text-2xl font-bold text-blue-600"><?php echo htmlspecialchars($site_name); ?></h1>
-        </div>
-        <nav class="mt-5">
-            <a href="dashboard.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-th-large mr-3"></i> Dashboard
-            </a>
-            <a href="my-bookings.php" class="flex items-center mt-4 py-2 px-6 bg-gray-200 text-gray-700">
-                <i class="fas fa-calendar-alt mr-3"></i> My Bookings
-            </a>
-            <a href="profile.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-user mr-3"></i> Profile
-            </a>
-             <a href="reward-points.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-gift mr-3"></i> Reward Points
-            </a>
-            <a href="../logout.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-sign-out-alt mr-3"></i> Logout
-            </a>
-        </nav>
-    </aside>
+<?php
+$pageTitle = "My Bookings"; //Set the page title
+require_once 'partials/header_user.php'; //Include the header
+?>
 
     <!-- Content -->
     <div class="flex-1 flex flex-col overflow-hidden">
@@ -90,6 +58,12 @@ $bookings = select(
         </header>
 
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+            <?php if (isset($_SESSION['booking_success'])): ?>
+                <div class="mb-4 p-3 text-sm bg-green-100 text-green-700 rounded-lg">
+                    <?php echo $_SESSION['booking_success']; ?>
+                </div>
+                <?php unset($_SESSION['booking_success']); ?>
+            <?php endif; ?>
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white">
@@ -135,8 +109,6 @@ $bookings = select(
                 </div>
             </div>
         </main>
-    </div>
-</div>
-
-</body>
-</html>
+<?php
+require_once 'partials/footer_user.php'; // Include the footer
+?>

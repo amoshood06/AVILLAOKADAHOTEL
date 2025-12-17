@@ -1,6 +1,14 @@
 <?php
-session_start();
+session_start(); // Start session to access user_id
 require_once '../config/functions.php'; // Path from user/partials to config
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../login.php');
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+$user = select("SELECT * FROM users WHERE id = ?", [$user_id], true); // Fetch user data
 
 // Fetch site settings
 $settings = getSiteSettings();
@@ -34,6 +42,14 @@ if (!isset($pageTitle)) {
         <div class="h-20 flex items-center justify-center">
             <h1 class="text-2xl font-bold text-blue-600"><?php echo htmlspecialchars($site_name); ?></h1>
         </div>
+        <div class="p-4 text-center border-b border-gray-200">
+            <?php
+            $profilePicture = !empty($user['profile_picture']) ? '../asset/image/users/' . htmlspecialchars($user['profile_picture']) : '../asset/image/av1.png'; // Default image if none
+            ?>
+            <img src="<?php echo $profilePicture; ?>" alt="User Avatar" class="w-24 h-24 rounded-full mx-auto object-cover border-2 border-blue-400">
+            <p class="mt-2 text-lg font-semibold text-gray-800"><?php echo htmlspecialchars($user['full_name'] ?? 'Guest'); ?></p>
+            <p class="text-sm text-gray-500"><?php echo htmlspecialchars($user['email'] ?? ''); ?></p>
+        </div>
         <nav class="mt-5">
             <a href="dashboard.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
                 <i class="fas fa-th-large mr-3"></i> Dashboard
@@ -46,6 +62,21 @@ if (!isset($pageTitle)) {
             </a>
              <a href="reward-points.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
                 <i class="fas fa-gift mr-3"></i> Reward Points
+            </a>
+            <a href="add-to-cart.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
+                <i class="fas fa-cart-plus mr-3"></i> Add to Cart
+            </a>
+            <a href="book-room.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
+                <i class="fas fa-bed mr-3"></i> Book Room
+            </a>
+            <a href="booking-details.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
+                <i class="fas fa-book-open mr-3"></i> Booking Details
+            </a>
+            <a href="my-foods.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
+                <i class="fas fa-hamburger mr-3"></i> Order Foods
+            </a>
+            <a href="payment.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
+                <i class="fas fa-credit-card mr-3"></i> Payment
             </a>
             <a href="../logout.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
                 <i class="fas fa-sign-out-alt mr-3"></i> Logout
@@ -61,3 +92,4 @@ if (!isset($pageTitle)) {
         </header>
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
             <div class="max-w-7xl mx-auto">
+
