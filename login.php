@@ -113,6 +113,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
 
             <div class="mt-4 text-center">
+                <a href="forgot-password.php" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                    Forgot Password?
+                </a>
+            </div>
+
+            <div class="mt-2 text-center">
                 <a href="register.php" class="text-gray-600 hover:text-blue-600 font-medium">
                     Create Account
                 </a>
