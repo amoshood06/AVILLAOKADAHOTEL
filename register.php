@@ -1,6 +1,7 @@
 <?php
-session_start();
 require_once 'config/functions.php';
+initSessionConfig();
+session_start();
 
 $message = '';
 $error = false;
@@ -95,7 +96,7 @@ if (isset($_SESSION['error_message'])) {
 
         <div class="hidden md:flex md:w-1/2 background-image items-center justify-center p-8">
             <div class="glass-panel p-10 rounded-xl w-full h-full flex items-center justify-center">
-                <img src="asset/image/av1.png" alt="" class="w-[200px]">
+                <img src="asset/image/newlogo.png" alt="" class="w-[200px]">
             </div>
         </div>
 

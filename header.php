@@ -1,6 +1,7 @@
 <?php
-session_start();
 require_once 'config/functions.php';
+initSessionConfig();
+session_start();
 
 $settings = getSiteSettings();
 // Initialize with default values

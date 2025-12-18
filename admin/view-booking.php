@@ -1,6 +1,7 @@
 <?php
-session_start();
 require_once '../config/functions.php';
+initSessionConfig();
+session_start();
 
 if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
     header('Location: ../login.php');
@@ -71,6 +72,9 @@ $foodOrders = select(
             </a>
             <a href="manage-food.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
                 <i class="fas fa-utensils mr-3"></i> Food Menu
+            </a>
+            <a href="manage-food-orders.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
+                <i class="fas fa-concierge-bell mr-3"></i> Food Orders
             </a>
             <a href="manage-users.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
                 <i class="fas fa-users mr-3"></i> Users

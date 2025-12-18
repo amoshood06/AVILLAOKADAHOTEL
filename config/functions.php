@@ -9,6 +9,22 @@
 require_once 'db.php';
 
 /**
+ * Initialize session configuration
+ * This must be called BEFORE session_start()
+ */
+function initSessionConfig() {
+    // Set session cookie parameters to ensure persistence
+    // Arguments: lifetime, path, domain, secure, httponly
+    // Path '/' ensures cookie is valid for entire domain
+    // Domain '' makes it automatically set to current host
+    // Secure 'false' for HTTP, 'true' for HTTPS (change if using HTTPS)
+    // httponly 'true' helps prevent XSS attacks
+    session_set_cookie_params(86400, '/', '', false, true);
+}
+
+
+
+/**
  * Executes a SELECT query and returns the result set.
  *
  * @param string $sql The SQL query to execute.

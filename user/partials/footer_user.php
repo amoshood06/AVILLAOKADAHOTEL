@@ -1,10 +1,11 @@
-</div>
 </main>
-</div>
 </div>
 
 <script>
-    // Add any specific scripts for the user panel here
+    document.getElementById('sidebar-toggle').addEventListener('click', function() {
+        var sidebar = document.querySelector('aside');
+        sidebar.classList.toggle('-translate-x-full');
+    });
 </script>
 
 </body>

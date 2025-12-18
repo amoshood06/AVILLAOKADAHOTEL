@@ -2,7 +2,17 @@
 $title = "Our Rooms";
 require_once 'header.php';
 
-$rooms = select("SELECT * FROM rooms WHERE status = 'available' ORDER BY id DESC");
+$rooms = select("
+    SELECT r.* FROM rooms r 
+    WHERE r.status = 'available' 
+    AND r.id NOT IN (
+        SELECT DISTINCT b.room_id 
+        FROM bookings b 
+        JOIN booking_foods bf ON b.id = bf.booking_id 
+        WHERE bf.delivery_status = 'pending'
+    )
+    ORDER BY r.id DESC
+", []);
 
 ?>
 

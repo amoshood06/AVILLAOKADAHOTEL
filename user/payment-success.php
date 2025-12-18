@@ -1,6 +1,7 @@
 <?php
-session_start();
 require_once '../config/functions.php';
+initSessionConfig();
+session_start();
 
 if (!isset($_SESSION['user']) || !isset($_SESSION['success_booking_id'])) {
     header('Location: my-bookings.php');

@@ -1,6 +1,7 @@
 <?php
-session_start();
 require_once '../config/functions.php';
+initSessionConfig();
+session_start();
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../login.php');

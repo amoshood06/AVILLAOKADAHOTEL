@@ -1,10 +1,11 @@
 <?php
-session_start();
 require_once 'config/functions.php';
+initSessionConfig();
+session_start();
 
 // Check if user is already logged in, then redirect
-if (isset($_SESSION['user_id'])) {
-    if ($_SESSION['user_role'] === 'admin') {
+if (isset($_SESSION['user'])) {
+    if ($_SESSION['user']['role'] === 'admin') {
         header("Location: admin/dashboard.php");
     } else {
         header("Location: user/dashboard.php");
@@ -29,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_role'] = $user['role'];
         $_SESSION['user_name'] = $user['full_name'];
+        $_SESSION['user'] = $user; // Set the user array for admin compatibility
 
         // Redirect based on role
         if ($user['role'] === 'admin') {
@@ -73,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="hidden md:flex md:w-1/2 background-image items-center justify-center p-8">
             <div class="glass-panel p-10 rounded-xl w-full h-full flex items-center justify-center">
-                <img src="asset/image/av1.png" alt="" class="w-[200px]">
+                <img src="asset/image/newlogo.png" alt="" class="w-[200px]">
             </div>
         </div>
 

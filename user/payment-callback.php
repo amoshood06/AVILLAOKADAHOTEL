@@ -1,6 +1,7 @@
 <?php
-session_start();
 require_once '../config/functions.php';
+initSessionConfig();
+session_start();
 
 if (!isset($_SESSION['user']) || !isset($_GET['transaction_id']) || !isset($_GET['tx_ref'])) {
     // Missing critical info, or user not logged in
@@ -126,8 +127,8 @@ if ($result && $result->status === 'success') {
             }
 
             foreach ($_SESSION['food_cart'] as $item) {
-                $sql_food = "INSERT INTO booking_foods (booking_id, food_id, quantity, payment_status, transaction_ref, user_id) VALUES (?, ?, ?, ?, ?, ?)";
-                execute($sql_food, [$bookingIdForDelivery, $item['food_id'], $item['quantity'], 'paid', $tx_ref_from_fw, $user['id']]);
+                $sql_food = "INSERT INTO booking_foods (booking_id, food_id, quantity, delivery_status) VALUES (?, ?, ?, 'pending')";
+                execute($sql_food, [$bookingIdForDelivery, $item['food_id'], $item['quantity']]);
             }
 
             $paymentSql = "INSERT INTO payments (booking_id, amount, method, status, reference, user_id, order_type) VALUES (?, ?, ?, ?, ?, ?, ?)";

@@ -10,15 +10,15 @@ $foods = select("SELECT * FROM food_menu ORDER BY id DESC LIMIT 3");
         <section class="py-12 px-4 md:px-16">
             <div class="flex flex-col md:flex-row justify-between max-w-5xl mx-auto shadow-lg bg-white rounded-lg p-6 md:p-8 -mt-20 relative z-20 border border-gray-100">
                 <div class="flex-1 text-center py-4 border-b md:border-b-0 md:border-r border-gray-200">
-                    <p class="text-5xl font-extrabold text-yellow-600">98%</p>
+                    <p id="stats-satisfaction" class="text-5xl font-extrabold text-yellow-600">98%</p>
                     <p class="text-sm uppercase tracking-widest text-gray-500 mt-2">Guest Satisfaction</p>
                 </div>
                 <div class="flex-1 text-center py-4 border-b md:border-b-0 md:border-r border-gray-200">
-                    <p class="text-5xl font-extrabold text-yellow-600">15+</p>
+                    <p id="stats-experience" class="text-5xl font-extrabold text-yellow-600">15+</p>
                     <p class="text-sm uppercase tracking-widest text-gray-500 mt-2">Years of Experience</p>
                 </div>
                 <div class="flex-1 text-center py-4">
-                    <p class="text-5xl font-extrabold text-yellow-600">25K+</p>
+                    <p id="stats-customers" class="text-5xl font-extrabold text-yellow-600">25K+</p>
                     <p class="text-sm uppercase tracking-widest text-gray-500 mt-2">Happy Customers</p>
                 </div>
             </div>
@@ -78,8 +78,8 @@ $foods = select("SELECT * FROM food_menu ORDER BY id DESC LIMIT 3");
             </div>
         </section>
         <!-- Room Slide Show -->
-        <section class="bg-white">
-            <div class="swiper-container" style="width: 100%; height: 500px;">
+        <section class="bg-white overflow-hidden">
+            <div class="swiper-container overflow-hidden" style="width: 100%; height: 500px;">
                 <div class="swiper-wrapper">
                     <?php
                     $slider_images = glob('asset/slider/*.{jpg,jpeg,png,gif}', GLOB_BRACE);
@@ -126,6 +126,34 @@ $foods = select("SELECT * FROM food_menu ORDER BY id DESC LIMIT 3");
             },
             
         });
+    </script>
+    <script>
+        function animateValue(obj, start, end, duration, suffix = '') {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start) + suffix;
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        const statsSection = document.querySelector('.py-12.px-4.md\\:px-16');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateValue(document.getElementById('stats-satisfaction'), 0, 98, 2000, '%');
+                    animateValue(document.getElementById('stats-experience'), 0, 15, 2000, '+');
+                    animateValue(document.getElementById('stats-customers'), 0, 25, 2000, 'K+');
+                    observer.unobserve(statsSection);
+                }
+            });
+        });
+
+        observer.observe(statsSection);
     </script>
 </body>
 </html>

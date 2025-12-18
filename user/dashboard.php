@@ -1,6 +1,15 @@
 <?php
-session_start();
 require_once '../config/functions.php';
+initSessionConfig();
+session_start();
+
+// Calculate total items in cart
+$cart_total_items = 0;
+if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $item) {
+        $cart_total_items += $item['quantity'];
+    }
+}
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../login.php');
@@ -92,11 +101,11 @@ require_once 'partials/header_user.php'; //Include the header
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <div class="flex items-center">
-                        <i class="fas fa-gift fa-3x text-yellow-500"></i>
+                        <i class="fas fa-shopping-cart fa-3x text-yellow-500"></i>
                         <div class="ml-4">
-                            <p class="text-lg text-gray-600">Reward Points</p>
-                            <p class="text-2xl font-bold text-gray-800"><?php echo $rewardPoints; ?></p>
-                            <a href="reward-points.php" class="text-blue-500 text-sm hover:underline">Manage Points</a>
+                            <p class="text-lg text-gray-600">My Cart</p>
+                            <p class="text-2xl font-bold text-gray-800"><?php echo $cart_total_items; ?> Items</p>
+                            <a href="my-foods.php" class="text-blue-500 text-sm hover:underline">View Cart</a>
                         </div>
                     </div>
                 </div>

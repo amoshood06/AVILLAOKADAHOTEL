@@ -1,6 +1,7 @@
 <?php
-session_start();
 require_once '../config/functions.php';
+initSessionConfig();
+session_start();
 
 // Check if the user is logged in and is an admin
 if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
@@ -11,15 +12,15 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
 $user = $_SESSION['user'];
 
 // Fetch statistics
-$totalUsers = select("SELECT COUNT(*) as total FROM users", [], true)['total'];
-$totalBookings = select("SELECT COUNT(*) as total FROM bookings", [], true)['total'];
-$totalRooms = select("SELECT COUNT(*) as total FROM rooms", [], true)['total'];
+$totalUsers = select("SELECT COUNT(*) as total FROM users", [], true)['total'] ?? 0;
+$totalBookings = select("SELECT COUNT(*) as total FROM bookings", [], true)['total'] ?? 0;
+$totalRooms = select("SELECT COUNT(*) as total FROM rooms", [], true)['total'] ?? 0;
 $totalRevenueResult = select("SELECT SUM(total_amount) as total FROM bookings WHERE payment_status = 'paid'", [], true);
 $totalRevenue = $totalRevenueResult['total'] ?? 0;
 
 
 // Fetch recent bookings
-$recentBookings = select("SELECT b.*, u.full_name, r.room_name FROM bookings b JOIN users u ON b.user_id = u.id JOIN rooms r ON b.room_id = r.id ORDER BY b.created_at DESC LIMIT 5");
+$recentBookings = select("SELECT b.*, u.full_name, r.room_name FROM bookings b JOIN users u ON b.user_id = u.id JOIN rooms r ON b.room_id = r.id ORDER BY b.created_at DESC LIMIT 5") ?? [];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,6 +51,9 @@ $recentBookings = select("SELECT b.*, u.full_name, r.room_name FROM bookings b J
             </a>
             <a href="manage-food.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
                 <i class="fas fa-utensils mr-3"></i> Food Menu
+            </a>
+            <a href="manage-food-orders.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
+                <i class="fas fa-concierge-bell mr-3"></i> Food Orders
             </a>
             <a href="manage-users.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
                 <i class="fas fa-users mr-3"></i> Users

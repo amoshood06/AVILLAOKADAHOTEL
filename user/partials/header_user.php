@@ -1,6 +1,7 @@
 <?php
-session_start(); // Start session to access user_id
-require_once '../config/functions.php'; // Path from user/partials to config
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../login.php');
@@ -34,11 +35,10 @@ if (!isset($pageTitle)) {
         /* Add any custom styles needed for user pages */
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 flex">
 
-<div class="flex h-screen bg-gray-100">
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md">
+    <aside class="w-64 bg-white shadow-md absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out z-20">
         <div class="h-20 flex items-center justify-center">
             <h1 class="text-2xl font-bold text-blue-600"><?php echo htmlspecialchars($site_name); ?></h1>
         </div>
@@ -60,9 +60,7 @@ if (!isset($pageTitle)) {
             <a href="profile.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
                 <i class="fas fa-user mr-3"></i> Profile
             </a>
-             <a href="reward-points.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-gift mr-3"></i> Reward Points
-            </a>
+
             <a href="add-to-cart.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
                 <i class="fas fa-cart-plus mr-3"></i> Add to Cart
             </a>
@@ -87,9 +85,13 @@ if (!isset($pageTitle)) {
     <!-- Content Wrapper -->
     <div class="flex-1 flex flex-col overflow-hidden">
         <header class="flex justify-between items-center p-6 bg-white border-b-2 border-gray-200">
-            <h2 class="text-2xl text-gray-700 font-semibold"><?php echo htmlspecialchars($pageTitle); ?></h2>
+            <div class="flex items-center">
+                <button id="sidebar-toggle" class="text-gray-500 focus:outline-none">
+                    <i class="fas fa-bars fa-2x"></i>
+                </button>
+                <h2 class="text-2xl text-gray-700 font-semibold ml-4"><?php echo htmlspecialchars($pageTitle); ?></h2>
+            </div>
             <!-- You can add user-specific header elements here, e.g., welcome message, notifications -->
         </header>
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
             <div class="max-w-7xl mx-auto">
-
