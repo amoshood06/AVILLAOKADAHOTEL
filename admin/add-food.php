@@ -43,11 +43,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
+$pageTitle = "Add New Food Item";
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+
+<?php include 'header.php'; ?>
+
+            <div class="max-w-7xl mx-auto">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Food Item - Okarahotel</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -135,5 +136,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-</body>
-</html>
+<?php include 'footer.php'; ?>

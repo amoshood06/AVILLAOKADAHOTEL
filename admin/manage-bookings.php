@@ -30,24 +30,12 @@ if (isset($_GET['update_status'])) {
 
 $bookings = select("SELECT b.*, u.full_name, r.room_name FROM bookings b JOIN users u ON b.user_id = u.id JOIN rooms r ON b.room_id = r.id ORDER BY b.created_at DESC");
 
+$pageTitle = "Manage Bookings";
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Bookings - Okarahotel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body class="bg-gray-100">
 
-<div class="flex h-screen bg-gray-100">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md">
-        <div class="h-20 flex items-center justify-center">
-            <h1 class="text-2xl font-bold text-blue-600">Okarahotel</h1>
-        </div>
+<?php include 'header.php'; ?>
+
+            <div class="max-w-7xl mx-auto">
         <nav class="mt-5">
             <a href="dashboard.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
                 <i class="fas fa-th-large mr-3"></i> Dashboard
@@ -140,5 +128,4 @@ $bookings = select("SELECT b.*, u.full_name, r.room_name FROM bookings b JOIN us
     </div>
 </div>
 
-</body>
-</html>
+<?php include 'footer.php'; ?>

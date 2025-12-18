@@ -46,8 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
+$pageTitle = "Add New Room";
 ?>
-<!DOCTYPE html>
+
+<?php include 'header.php'; ?>
+
+            <div class="max-w-7xl mx-auto">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -149,5 +153,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-</body>
-</html>
+<?php include 'footer.php'; ?>

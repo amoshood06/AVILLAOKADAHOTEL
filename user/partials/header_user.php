@@ -38,9 +38,17 @@ if (!isset($pageTitle)) {
 <body class="bg-gray-100 flex">
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out z-20">
-        <div class="h-20 flex items-center justify-center">
-            <h1 class="text-2xl font-bold text-blue-600"><?php echo htmlspecialchars($site_name); ?></h1>
+    <aside id="sidebar" class="w-64 bg-white shadow-md fixed inset-y-0 left-0 z-30 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out">
+        <div class="h-20 flex items-center justify-center relative">
+            <?php if (!empty($logo) && file_exists('../asset/image/' . $logo)): ?>
+                <img src="../asset/image/<?php echo htmlspecialchars($logo); ?>" alt="<?php echo htmlspecialchars($site_name); ?>" class="h-12 w-auto">
+            <?php else: ?>
+                <h1 class="text-2xl font-bold text-blue-600"><?php echo htmlspecialchars($site_name); ?></h1>
+            <?php endif; ?>
+            <!-- Close button for mobile -->
+            <button id="sidebar-close" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 md:hidden">
+                <i class="fas fa-times fa-lg"></i>
+            </button>
         </div>
         <div class="p-4 text-center border-b border-gray-200">
             <?php
@@ -81,6 +89,9 @@ if (!isset($pageTitle)) {
             </a>
         </nav>
     </aside>
+
+    <!-- Mobile overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-10 hidden md:hidden" onclick="closeSidebar()"></div>
 
     <!-- Content Wrapper -->
     <div class="flex-1 flex flex-col overflow-hidden">

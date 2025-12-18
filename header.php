@@ -64,8 +64,44 @@ if (is_array($settings)) {
                     <a href="register.php" class="hover:text-gray-300 rounded-[20px] border-2 border-yellow-600 pt-[10px] pb-[10px] pr-[20px] pl-[20px]">Register</a>
                 <?php endif; ?>
             </div>
-            <button class="text-white md:hidden">
+            <button id="mobile-menu-button" class="text-white md:hidden">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
         </nav>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden fixed top-0 left-0 w-full h-screen bg-gray-800 bg-opacity-90 z-20">
+            <div class="flex justify-end p-6">
+                <button id="close-menu-button" class="text-white">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="flex flex-col items-center justify-center h-full -mt-12 space-y-6 text-white uppercase tracking-wider text-lg">
+                <a href="index.php" class="hover:text-gray-300">Home</a>
+                <a href="rooms.php" class="hover:text-gray-300">Rooms</a>
+                <a href="food-menu.php" class="hover:text-gray-300">Dining</a>
+                <a href="contact.php" class="hover:text-gray-300">Contact</a>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <a href="<?php echo $_SESSION['user_role'] === 'admin' ? 'admin/dashboard.php' : 'user/dashboard.php'; ?>" class="hover:text-gray-300">Dashboard</a>
+                    <a href="logout.php" class="hover:text-gray-300">Logout</a>
+                <?php else: ?>
+                    <a href="login.php" class="hover:text-gray-300">Login</a>
+                    <a href="register.php" class="hover:text-gray-300">Register</a>
+                <?php endif; ?>
+            </div>
+        </div>
     </header>
+
+    <script>
+        const menuButton = document.getElementById('mobile-menu-button');
+        const closeButton = document.getElementById('close-menu-button');
+        const menu = document.getElementById('mobile-menu');
+
+        menuButton.addEventListener('click', function() {
+            menu.classList.remove('hidden');
+        });
+
+        closeButton.addEventListener('click', function() {
+            menu.classList.add('hidden');
+        });
+    </script>

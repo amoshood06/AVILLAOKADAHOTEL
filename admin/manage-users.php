@@ -35,19 +35,12 @@ if (isset($_GET['change_role'])) {
 
 $users = select("SELECT * FROM users ORDER BY created_at DESC");
 
+$pageTitle = "Manage Users";
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users - Okarahotel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body class="bg-gray-100">
 
-<div class="flex h-screen bg-gray-100">
+<?php include 'header.php'; ?>
+
+            <div class="max-w-7xl mx-auto">
     <!-- Sidebar -->
     <aside class="w-64 bg-white shadow-md">
         <div class="h-20 flex items-center justify-center">
@@ -140,5 +133,4 @@ $users = select("SELECT * FROM users ORDER BY created_at DESC");
     </div>
 </div>
 
-</body>
-</html>
+<?php include 'footer.php'; ?>
