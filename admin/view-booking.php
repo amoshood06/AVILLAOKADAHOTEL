@@ -48,18 +48,6 @@ $pageTitle = "View Booking Details";
 <?php include 'header.php'; ?>
 
             <div class="max-w-7xl mx-auto">
-    <title>View Booking - Okarahotel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body class="bg-gray-100">
-
-<div class="flex h-screen bg-gray-100">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md">
-        <div class="h-20 flex items-center justify-center">
-            <h1 class="text-2xl font-bold text-blue-600">Okarahotel</h1>
-        </div>
         <nav class="mt-5">
             <a href="dashboard.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
                 <i class="fas fa-th-large mr-3"></i> Dashboard
@@ -86,19 +74,7 @@ $pageTitle = "View Booking Details";
                 <i class="fas fa-sign-out-alt mr-3"></i> Logout
             </a>
         </nav>
-    </aside>
-
-    <!-- Content -->
-    <div class="flex-1 flex flex-col overflow-hidden">
-        <header class="flex justify-between items-center p-6 bg-white border-b-2 border-gray-200">
-            <h2 class="text-2xl text-gray-700 font-semibold">Booking Details (ID: <?php echo htmlspecialchars($booking['id']); ?>)</h2>
-            <div class="flex items-center">
-                <span class="text-gray-600 mr-2">Welcome, <?php echo htmlspecialchars($user['full_name']); ?></span>
-                <i class="fas fa-user-circle fa-2x text-gray-500"></i>
-            </div>
-        </header>
-
-        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+            <div class="max-w-7xl mx-auto">
             <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- Booking Information -->
                 <div class="bg-white p-6 rounded-lg shadow-md">

@@ -96,51 +96,6 @@ $pageTitle = "Site Settings";
 <?php include 'header.php'; ?>
 
             <div class="max-w-7xl mx-auto">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body class="bg-gray-100">
-
-<div class="flex h-screen bg-gray-100">
-     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md">
-        <div class="h-20 flex items-center justify-center">
-            <h1 class="text-2xl font-bold text-blue-600">Okarahotel</h1>
-        </div>
-        <nav class="mt-5">
-            <a href="dashboard.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-th-large mr-3"></i> Dashboard
-            </a>
-            <a href="manage-bookings.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-calendar-alt mr-3"></i> Bookings
-            </a>
-            <a href="manage-rooms.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-bed mr-3"></i> Rooms
-            </a>
-            <a href="manage-food.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-utensils mr-3"></i> Food Menu
-            </a>
-            <a href="manage-food-orders.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-concierge-bell mr-3"></i> Food Orders
-            </a>
-            <a href="manage-users.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-users mr-3"></i> Users
-            </a>
-            <a href="site-setting.php" class="flex items-center mt-4 py-2 px-6 bg-gray-200 text-gray-700">
-                <i class="fas fa-cog mr-3"></i> Settings
-            </a>
-            <a href="../logout.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
-                <i class="fas fa-sign-out-alt mr-3"></i> Logout
-            </a>
-        </nav>
-    </aside>
-
-    <!-- Content -->
-    <div class="flex-1 flex flex-col overflow-hidden">
-        <header class="flex justify-between items-center p-6 bg-white border-b-2 border-gray-200">
-            <h2 class="text-2xl text-gray-700 font-semibold">Site Settings</h2>
-        </header>
-
-        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
             <div class="max-w-4xl mx-auto">
                  <?php if ($message): ?>
                     <div class="mb-4 p-4 <?php echo strpos($message, 'success') !== false ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'; ?> rounded-lg">

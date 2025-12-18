@@ -67,7 +67,6 @@ $pageTitle = "Edit Room";
 <?php include 'header.php'; ?>
 
             <div class="max-w-7xl mx-auto">
-        <nav class="mt-5">
             <a href="dashboard.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
                 <i class="fas fa-th-large mr-3"></i> Dashboard
             </a>
@@ -92,17 +91,7 @@ $pageTitle = "Edit Room";
             <a href="../logout.php" class="flex items-center mt-4 py-2 px-6 text-gray-600 hover:bg-gray-200">
                 <i class="fas fa-sign-out-alt mr-3"></i> Logout
             </a>
-        </nav>
-    </aside>
-
-    <!-- Content -->
-    <div class="flex-1 flex flex-col overflow-hidden">
-        <header class="flex justify-between items-center p-6 bg-white border-b-2 border-gray-200">
-            <h2 class="text-2xl text-gray-700 font-semibold">Edit Room</h2>
-            <a href="manage-rooms.php" class="text-blue-500 hover:underline">Back to Rooms</a>
-        </header>
-
-        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+            <div class="max-w-7xl mx-auto">
             <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow">
                 <?php if (!empty($errors)): ?>
                     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
