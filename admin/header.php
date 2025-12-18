@@ -16,7 +16,7 @@ $settings = getSiteSettings();
 $site_name = $settings['site_name'] ?? 'Okarahotel';
 $logo = $settings['logo'] ?? 'logo.png';
 ?>
-
+<script src="https://cdn.tailwindcss.com"></script>
 <div class="flex h-screen bg-gray-100">
     <!-- Sidebar -->
     <aside id="sidebar" class="w-64 bg-white shadow-md fixed inset-y-0 left-0 z-50 transform -translate-x-full md:translate-x-0 md:static md:inset-0 transition-transform duration-300 ease-in-out">
