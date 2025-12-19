@@ -24,6 +24,16 @@ function closeSidebar() {
     overlay.classList.add('hidden');
 }
 
+function toggleMobileMenu() {
+    const mobileMenu = document.getElementById('mobile-top-menu');
+    
+    if (mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.remove('hidden');
+    } else {
+        mobileMenu.classList.add('hidden');
+    }
+}
+
 // Close sidebar when clicking on a menu item (mobile)
 document.querySelectorAll('#sidebar a').forEach(link => {
     link.addEventListener('click', () => {

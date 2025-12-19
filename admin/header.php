@@ -72,9 +72,32 @@ $logo = $settings['logo'] ?? 'logo.png';
                 </button>
                 <h2 class="text-2xl text-gray-700 font-semibold"><?php echo htmlspecialchars($pageTitle ?? 'Admin Panel'); ?></h2>
             </div>
-            <div class="flex items-center">
+            <!-- Mobile Top Navigation Menu Button -->
+            <div class="flex items-center md:hidden">
+                <button onclick="toggleMobileMenu()" class="text-gray-500 focus:outline-none mr-4">
+                    <i class="fas fa-ellipsis-v fa-lg"></i>
+                </button>
+            </div>
+            <!-- Desktop User Info -->
+            <div class="hidden md:flex items-center">
                 <span class="text-gray-600 mr-2">Welcome, <?php echo htmlspecialchars($user['full_name']); ?></span>
                 <i class="fas fa-user-circle fa-2x text-gray-500"></i>
             </div>
         </header>
+
+        <!-- Mobile Top Menu -->
+        <div id="mobile-top-menu" class="md:hidden bg-white border-b border-gray-200 px-4 py-2 hidden">
+            <div class="flex items-center justify-between">
+                <span class="text-gray-600 text-sm">Welcome, <?php echo htmlspecialchars($user['full_name']); ?></span>
+                <div class="flex space-x-2">
+                    <a href="site-setting.php" class="text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-cog"></i>
+                    </a>
+                    <a href="../logout.php" class="text-gray-600 hover:text-red-600">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
