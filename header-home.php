@@ -91,7 +91,7 @@ if (is_array($settings)) {
             <div class="flex flex-col items-center justify-center h-full -mt-12 space-y-6 text-white uppercase tracking-wider text-lg">
                 <a href="index.php" class="hover:text-gray-300">Home</a>
                 <a href="rooms.php" class="hover:text-gray-300">Rooms</a>
-                <a href="food-menu.php" class="hover:text-gray-300">Dining</a>
+                <a href="food-menu.php" class="hover:text-gray-300">Foods</a>
                 <a href="contact.php" class="hover:text-gray-300">Contact</a>
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <a href="<?php echo $_SESSION['user_role'] === 'admin' ? 'admin/dashboard.php' : 'user/dashboard.php'; ?>" class="hover:text-gray-300">Dashboard</a>

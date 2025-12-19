@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
-                <img src="asset/image/<?php echo htmlspecialchars($food['image']); ?>" alt="<?php echo htmlspecialchars($food['food_name']); ?>" class="w-full h-auto rounded-lg shadow-lg">
+                <img src="asset/image/<?php echo htmlspecialchars($food['image']); ?>" alt="<?php echo htmlspecialchars($food['food_name']); ?>" class="w-[500px] h-[500px] rounded-lg shadow-lg">
             </div>
             <div>
                 <h1 class="text-4xl font-serif mb-4"><?php echo htmlspecialchars($food['food_name']); ?></h1>
